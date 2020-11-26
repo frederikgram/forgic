@@ -1,0 +1,13 @@
+// Initializations
+assign pi 3.141
+assign C 100
+
+// Variables cannot be used
+// for storage unless
+// already initialized
+assign pi2 0
+
+// Test nested Actions
+assign r add pi sub 3 6
+
+add pi 5

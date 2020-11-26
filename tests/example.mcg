@@ -1,0 +1,11 @@
+// Calculate the radius of a circle, from its circumference
+
+// Constants
+assign 3.141 pi
+assign 50 circum
+
+// r = circum / (2 * pi)
+assign div circum mult 2 pi r
+
+// Print to stdout
+write r
