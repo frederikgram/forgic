@@ -6,7 +6,8 @@ from dataclasses import dataclass
 
 class TokenType(Enum):
     OPERATOR = 1
-    ARGUMENT = 2
+    LITERAL = 2
+    VARIABLE = 3
 
 @dataclass
 class Token:
@@ -19,8 +20,6 @@ class Token:
 @dataclass
 class Construct:
     operator: Token
-
-    # @Future / Allow for arguments of type "Construct", which in turn allows for both parse- and as-trees
     arguments: List[Union[Token, "Construct"]]
 
  

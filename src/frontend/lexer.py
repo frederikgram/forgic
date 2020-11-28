@@ -8,14 +8,15 @@ def _get_token_type(word: str) -> TokenType:
    
     if word in operator_table:
         return TokenType.OPERATOR
+    elif word.isdigit():
+        return TokenType.LITERAL
     else:
-        return TokenType.ARGUMENT
+        return TokenType.VARIABLE
 
 def lex(text: str) -> List[Token]:
-    """ """
+    """ Convert a block of text to a list of structs.Token(s) """
 
     token_lines: List[Token] = list()
-
 
     for line in text.splitlines():
         token_line = list()

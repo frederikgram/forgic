@@ -1,12 +1,10 @@
 """ """
 
+import prefabs
+
 from typing import * 
 from frontend.structs import Construct
-
-
 from symboltable import symbol_table as stab
-
-import prefabs
 
 
 def _find_prefab_for_construct(construct: Construct) -> List[str]: 

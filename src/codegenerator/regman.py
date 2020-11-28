@@ -3,7 +3,7 @@
 import string
 
 from typing import *
-from structs import Construct
+from structs import Construct, TokenType
 
 from symboltable import symbol_table as stab
 from symboltable import reset_table as rtab
@@ -23,25 +23,30 @@ def _get_free_register() -> Union[int, None]:
 
 
 def alloc(constructs: List[Construct]) -> List[Construct]:
-    """ Convert naive-constructs to true-register constructs """
+    """ Convert naive-constructs to true-register constructs -
+    a construct in which any Token whose tokentype is a variable
+    has had its value converted from the argument name, to its
+    corresponding register value (changes throughout the program)
+    """
 
-
-    i = 0
-    while i < len(constructs):
-        construct = constructs[i]
-
-        # iterate over single construct args
+    for construct in constructs:
         for argument in construct.arguments:
 
+            # Ignore token if it isnt a Variable
+            if argument.tokentype != TokenType.VARIABLE:
+                continue
+
+            # If variable has a register representation,
+            # set its value to the name of the register
             if argument.value in stab:
                 argument.value = stab[argument.value]
 
-            elif argument.value[0] in string.ascii_letters:
-                
+            # Otherwise, find a free register and 
+            # assign the arguments value to it
+            else:
                 stab[argument.value] = _get_free_register()
                 argument.value = stab[argument.value]
        
-        i += 1
 
     return constructs
 

@@ -2,10 +2,10 @@
 
 import string
 from typing import *
+
 from structs import Token, TokenType, Construct
 from grammar import operator_table, ActionDescriptor
-
-
+from codegenerator import symboltable
 
 def parse(token_lines: List[List[Token]]) -> List[Construct]:
     """ Creates a list of Constructs from a given list of Tokens
@@ -26,7 +26,7 @@ def parse(token_lines: List[List[Token]]) -> List[Construct]:
         constructs: List[Construct] = list()
         deep_constructs: List[Construct] = list()
 
-        # Parse
+        # Recursive Descent Parsing
         while len(tokens) > 0:
             token = tokens.pop(0)
 
@@ -36,18 +36,16 @@ def parse(token_lines: List[List[Token]]) -> List[Construct]:
 
                     # Add calculation buffer as arg
                     argument_buffer.append(
-                        Token("buf", TokenType.ARGUMENT)
+                        Token(symboltable.calculation_buffer_variable_name, TokenType.VARIABLE)
                     )
 
                 # Recursively Parse the nested Action
                 deep_constructs = _parse_operator(token, tokens)
+
             else:
                 argument_buffer.append(token)
-
-        constructs.extend(deep_constructs)
-        constructs.append(
-            Construct(operator, argument_buffer)
-        )
+    
+        constructs.extend(deep_constructs + [Construct(operator, argument_buffer)])
 
         return constructs
 
@@ -59,14 +57,15 @@ def parse(token_lines: List[List[Token]]) -> List[Construct]:
         operator = line.pop(0)
         
         if operator.tokentype != TokenType.OPERATOR:
-            raise Exception(f"Expected operator, found argument: {operator.value}")
+            raise Exception(f"Expected operator, found {operator.tokentype}: {operator.value}")
 
         return _parse_operator(operator, line)
     
-   
+    # Combine Construct Lists   
     constructs = list()
     for line in token_lines:
         constructs.extend(_parse_line(line))
+
 
     return constructs
    

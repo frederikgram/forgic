@@ -93,8 +93,8 @@ if __name__ == "__main__":
 
     compile(inp, out, args["debug"])
 
+    # Assemble and link
     if args["as"] == True: 
-        # assemble and link
         subprocess.run([f"as", "--gstabs", f"{out.name}", "-o", f"{out.name[:-1] + 'o'}"])
         subprocess.run([f"ld", f"{out.name[:-1] + 'o'}", "-o", f"{out.name[:-2]}"])
         
